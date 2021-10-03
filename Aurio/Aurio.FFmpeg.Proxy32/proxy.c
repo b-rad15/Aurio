@@ -316,7 +316,7 @@ ProxyInstance *stream_open_file(int mode, char *filename)
 	pi_init(&pi);
 	pi->mode = mode;
 
-	av_register_all();
+	// av_register_all(); Deprecated in FFmpeg 4.x, safe to simply remove
 
 	if (avformat_open_input(&pi->fmt_ctx, filename, NULL, NULL) < 0) {
 		pi_set_error(pi, "Could not open source file %s", filename);
@@ -353,7 +353,7 @@ ProxyInstance *stream_open_bufferedio(int mode,
 
 	// Allocate IO buffer for the AVIOContext. 
 	// Must later be freed by av_free() from AVIOContext.buffer (which could be the same or a replacement buffer).
-	buffer = av_malloc(buffer_size + FF_INPUT_BUFFER_PADDING_SIZE);
+	buffer = av_malloc(buffer_size + AV_INPUT_BUFFER_PADDING_SIZE);
 
 	// Allocate the AVIOContext. Must later be freed by av_free().
 	io_ctx = avio_alloc_context(buffer, buffer_size, 0 /* not writeable */, opaque, read_packet, NULL /* no write_packet needed */, seek);
