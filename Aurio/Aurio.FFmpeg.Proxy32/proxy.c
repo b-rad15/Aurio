@@ -86,7 +86,7 @@ typedef struct ProxyInstance {
 	AVStream			*video_stream;
 	AVCodecContext		*audio_codec_ctx;
 	AVCodecContext		*video_codec_ctx;
-	AVPacket			pkt;
+	AVPacket			*pkt; // TODO: Make surte this is cleaned up I might've made a memory leak
 	AVFrame				*frame;
 	SwrContext			*swr;
 	struct SwsContext	*sws;
@@ -349,7 +349,7 @@ ProxyInstance *stream_open_bufferedio(int mode,
 	pi_init(&pi);
 	pi->mode = mode;
 
-	av_register_all();
+	// av_register_all(); safe to comment out in FFmpeg 4.x
 
 	// Allocate IO buffer for the AVIOContext. 
 	// Must later be freed by av_free() from AVIOContext.buffer (which could be the same or a replacement buffer).
@@ -462,7 +462,7 @@ ProxyInstance *stream_open(ProxyInstance *pi)
 			printf("output: %lld length, %d frame_size\n", pi->audio_output.length, pi->audio_output.frame_size);
 		}
 
-		if (pi->audio_codec_ctx->codec->capabilities & CODEC_CAP_DELAY) {
+		if (pi->audio_codec_ctx->codec->capabilities & AV_CODEC_CAP_DELAY) {
 			// When CODEC_CAP_DELAY is set, there is a delay between input and output of the decoder
 			printf("warning: cap delay!\n");
 		}
@@ -511,16 +511,16 @@ ProxyInstance *stream_open(ProxyInstance *pi)
 			printf("output: %lld length, %d frame_size\n", pi->video_output.length, pi->video_output.frame_size);
 		}
 
-		if (pi->video_codec_ctx->codec->capabilities & CODEC_CAP_DELAY) {
+		if (pi->video_codec_ctx->codec->capabilities & AV_CODEC_CAP_DELAY) {
 			// When CODEC_CAP_DELAY is set, there is a delay between input and output of the decoder
 			printf("warning: cap delay!\n");
 		}
 	}
 
 	/* initialize packet, set data to NULL, let the demuxer fill it */
-	av_init_packet(&pi->pkt);
-	pi->pkt.data = NULL;
-	pi->pkt.size = 0;
+	pi->pkt = av_packet_alloc();
+	pi->pkt->data = NULL; //I think this is now unnecessary
+	pi->pkt->size = 0;
 
 	pi->frame = av_frame_alloc();
 
@@ -551,11 +551,11 @@ int stream_read_frame_any(ProxyInstance *pi, int *got_frame, int *frame_type)
 	*frame_type = TYPE_NONE;
 
 	// if packet is empty, read new packet from stream
-	if (pi->pkt.size == 0) {
+	if (pi->pkt->size == 0) {
 		if ((ret = av_read_frame(pi->fmt_ctx, &pi->pkt)) < 0) {
 			// probably EOF, check for cached frames (e.g. SHN)
-			pi->pkt.data = NULL;
-			pi->pkt.size = 0;
+			pi->pkt->data = NULL;
+			pi->pkt->size = 0;
 			cached = 1;
 			if (DEBUG) fprintf(stderr, "Reaching packet EOF, setting cached flag\n");
 		}
@@ -564,7 +564,7 @@ int stream_read_frame_any(ProxyInstance *pi, int *got_frame, int *frame_type)
 			fprintf(stderr, "Packet EOF\n");
 		}
 
-		if (pi->mode & TYPE_AUDIO && (pi->pkt.stream_index == pi->audio_stream->index || cached)) {
+		if (pi->mode & TYPE_AUDIO && (pi->pkt->stream_index == pi->audio_stream->index || cached)) {
 			if (DEBUG && cached) fprintf(stderr, "Feeding empty EOF packet to audio decoder\n");
 			ret = avcodec_send_packet(pi->audio_codec_ctx, &pi->pkt);
 			if (ret < 0) {
@@ -577,7 +577,7 @@ int stream_read_frame_any(ProxyInstance *pi, int *got_frame, int *frame_type)
 				}
 			}
 		}
-		else if (pi->mode & TYPE_VIDEO && (pi->pkt.stream_index == pi->video_stream->index || cached)) {
+		else if (pi->mode & TYPE_VIDEO && (pi->pkt->stream_index == pi->video_stream->index || cached)) {
 			if (DEBUG && cached) fprintf(stderr, "Feeding empty EOF packet to video decoder\n");
 			ret = avcodec_send_packet(pi->video_codec_ctx, &pi->pkt);
 			if (ret < 0) {
@@ -592,7 +592,7 @@ int stream_read_frame_any(ProxyInstance *pi, int *got_frame, int *frame_type)
 		}
 		else {
 			// Skip to next packet by signalling that the packet was completely read
-			pi->pkt.size = 0;
+			pi->pkt->size = 0;
 		}
 	}
 
@@ -621,7 +621,7 @@ int stream_read_frame_any(ProxyInstance *pi, int *got_frame, int *frame_type)
 
 	if (!*got_frame) {
 		// if no frame was read, signal that we need to read the next packet
-		pi->pkt.size = 0;
+		pi->pkt->size = 0;
 	}
 
 	if (*frame_type == TYPE_AUDIO && convert_audio_samples(pi) < 0) {
@@ -634,7 +634,7 @@ int stream_read_frame_any(ProxyInstance *pi, int *got_frame, int *frame_type)
 	}
 
 	// free packet if all content has been read
-	if (pi->pkt.size == 0) {
+	if (pi->pkt->size == 0) {
 		av_packet_unref(&pi->pkt);
 	}
 
@@ -779,8 +779,8 @@ void stream_seek(ProxyInstance *pi, int64_t timestamp, int type)
 	if (pi->mode & TYPE_VIDEO) avcodec_flush_buffers(pi->video_codec_ctx);
 
 	// avcodec_flush_buffers invalidates the packet reference
-	pi->pkt.data = NULL;
-	pi->pkt.size = 0;
+	pi->pkt->data = NULL;
+	pi->pkt->size = 0;
 }
 
 void stream_seekindex_create(ProxyInstance *pi, int type) {
@@ -986,7 +986,7 @@ static void info(AVFormatContext *fmt_ctx)
 		printf("    type: .............. %d\n", codec->type);
 		printf("    id:   .............. %d\n", codec->id);
 
-		printf("stream %d: %s - %s [%d/%d]\n", i, av_get_media_type_string(codec_ctx->codec_type), codec_ctx->codec_name, codec_ctx->codec_type, codec_ctx->codec_id);
+		printf("stream %d: %s - %s [%d/%d]\n", i, av_get_media_type_string(codec_ctx->codec_type), codec_ctx->codec->name, codec_ctx->codec_type, codec_ctx->codec_id);
 		printf("\n");
 	}
 }
@@ -1076,9 +1076,9 @@ static int decode_audio_packet(ProxyInstance *pi, int *got_audio_frame, int cach
 
 	if (*got_audio_frame && DEBUG) {
 		printf("packet dts:%s pts:%s duration:%s\n",
-			av_ts2timestr(pi->pkt.dts, &pi->audio_stream->time_base),
-			av_ts2timestr(pi->pkt.pts, &pi->audio_stream->time_base),
-			av_ts2timestr(pi->pkt.duration, &pi->audio_stream->time_base));
+			av_ts2timestr(pi->pkt->dts, &pi->audio_stream->time_base),
+			av_ts2timestr(pi->pkt->pts, &pi->audio_stream->time_base),
+			av_ts2timestr(pi->pkt->duration, &pi->audio_stream->time_base));
 
 		printf("audio_frame%s n:%d nb_samples:%d pts:%s\n",
 			cached ? "(cached)" : "",
@@ -1122,9 +1122,9 @@ static int decode_video_packet(ProxyInstance *pi, int *got_video_frame, int cach
 
 	if (*got_video_frame && DEBUG) {
 		printf("packet dts:%s pts:%s duration:%s\n",
-			av_ts2timestr(pi->pkt.dts, &pi->video_stream->time_base),
-			av_ts2timestr(pi->pkt.pts, &pi->video_stream->time_base),
-			av_ts2timestr(pi->pkt.duration, &pi->video_stream->time_base));
+			av_ts2timestr(pi->pkt->dts, &pi->video_stream->time_base),
+			av_ts2timestr(pi->pkt->pts, &pi->video_stream->time_base),
+			av_ts2timestr(pi->pkt->duration, &pi->video_stream->time_base));
 
 		printf("video_frame%s n:%d coded_n:%d pts:%s\n",
 			cached ? "(cached)" : "",

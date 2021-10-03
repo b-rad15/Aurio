@@ -10,52 +10,52 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\Aurio.FFmpeg.Proxy32.dll">
+    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\Aurio.FFmpeg.Proxy32.dll" Condition="'$(Platform)' == 'x86'">
       <Link>ffmpeg32\Aurio.FFmpeg.Proxy32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\avcodec-57.dll">
+    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\avcodec-57.dll" Condition="'$(Platform)' == 'x86'">
       <Link>ffmpeg32\avcodec-57.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\avformat-57.dll">
+    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\avformat-57.dll" Condition="'$(Platform)' == 'x86'">
       <Link>ffmpeg32\avformat-57.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\avutil-55.dll">
+    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\avutil-55.dll" Condition="'$(Platform)' == 'x86'">
       <Link>ffmpeg32\avutil-55.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\swresample-2.dll">
+    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\swresample-2.dll" Condition="'$(Platform)' == 'x86'">
       <Link>ffmpeg32\swresample-2.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\swscale-4.dll">
+    <Content Include="..\Aurio.FFmpeg.Proxy32\bin\Debug\swscale-4.dll" Condition="'$(Platform)' == 'x86'">
       <Link>ffmpeg32\swscale-4.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\Aurio.FFmpeg.Proxy64.dll">
+    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\Aurio.FFmpeg.Proxy64.dll" Condition="'$(Platform)' == 'x64'">
       <Link>ffmpeg64\Aurio.FFmpeg.Proxy64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\avcodec-57.dll">
-      <Link>ffmpeg64\avcodec-57.dll</Link>
+    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\avcodec-58.dll" Condition="'$(Platform)' == 'x64'">
+      <Link>ffmpeg64\avcodec-58.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\avformat-57.dll">
-      <Link>ffmpeg64\avformat-57.dll</Link>
+    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\avformat-58.dll" Condition="'$(Platform)' == 'x64'">
+      <Link>ffmpeg64\avformat-58.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\avutil-55.dll">
-      <Link>ffmpeg64\avutil-55.dll</Link>
+    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\avutil-56.dll" Condition="'$(Platform)' == 'x64'">
+      <Link>ffmpeg64\avutil-56.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\swresample-2.dll">
-      <Link>ffmpeg64\swresample-2.dll</Link>
+    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\swresample-3.dll" Condition="'$(Platform)' == 'x64'">
+      <Link>ffmpeg64\swresample-3.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\swscale-4.dll">
-      <Link>ffmpeg64\swscale-4.dll</Link>
+    <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\swscale-5.dll" Condition="'$(Platform)' == 'x64'">
+      <Link>ffmpeg64\swscale-5.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
