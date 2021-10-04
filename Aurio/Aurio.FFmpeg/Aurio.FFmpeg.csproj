@@ -35,27 +35,27 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\Aurio.FFmpeg.Proxy64.dll" Condition="'$(Platform)' == 'x64'">
-      <Link>ffmpeg64\Aurio.FFmpeg.Proxy64.dll</Link>
+      <Link>Aurio.FFmpeg.Proxy64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\avcodec-58.dll" Condition="'$(Platform)' == 'x64'">
-      <Link>ffmpeg64\avcodec-58.dll</Link>
+      <Link>avcodec-58.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\avformat-58.dll" Condition="'$(Platform)' == 'x64'">
-      <Link>ffmpeg64\avformat-58.dll</Link>
+      <Link>avformat-58.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\avutil-56.dll" Condition="'$(Platform)' == 'x64'">
-      <Link>ffmpeg64\avutil-56.dll</Link>
+      <Link>avutil-56.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\swresample-3.dll" Condition="'$(Platform)' == 'x64'">
-      <Link>ffmpeg64\swresample-3.dll</Link>
+      <Link>swresample-3.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Aurio.FFmpeg.Proxy64\bin\Debug\swscale-5.dll" Condition="'$(Platform)' == 'x64'">
-      <Link>ffmpeg64\swscale-5.dll</Link>
+      <Link>swscale-5.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

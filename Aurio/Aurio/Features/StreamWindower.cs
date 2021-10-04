@@ -183,7 +183,7 @@ namespace Aurio.Features {
             // second, fill the stream input buffer - if no bytes returned we have reached the end of the stream
             streamBufferLevel = StreamUtil.ForceRead(stream, streamBuffer,
                 streamBufferOffset, streamBuffer.Length - streamBufferOffset);
-            if (streamBufferLevel == 0) {
+            if (frameOffset + frameSize > streamBufferLevel + streamBufferOffset) {
                 Debug.WriteLine("stream windowing finished - end position {0}/{1}", stream.Position, stream.Length);
                 return false; // whole stream has been processed
             }

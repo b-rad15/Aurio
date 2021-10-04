@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aurio.WaveControls", "Aurio.WaveControls\Aurio.WaveControls.csproj", "{FD0C6CC5-B509-4441-9AA2-E8B34BAD9F95}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aurio", "Aurio\Aurio.csproj", "{E868D91E-C5CF-46E4-BE2F-F95353ACB5E2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1904A41B-D1B8-40E5-ADBB-728DDCF7C816} = {1904A41B-D1B8-40E5-ADBB-728DDCF7C816}
+		{11C4D931-21A8-44DD-8093-E98CACD13468} = {11C4D931-21A8-44DD-8093-E98CACD13468}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aurio.Test.HugeControlRendering", "Aurio.Test.HugeControlRendering\Aurio.Test.HugeControlRendering.csproj", "{EDD59524-641D-4EB3-BF96-7138BBA8D009}"
 EndProject

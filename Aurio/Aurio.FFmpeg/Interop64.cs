@@ -25,7 +25,7 @@ using System.Text;
 namespace Aurio.FFmpeg {
     internal class Interop64 {
 
-        private const string FFMPEGPROXYLIB = "ffmpeg64\\Aurio.FFmpeg.Proxy64.dll";
+        private const string FFMPEGPROXYLIB = "Aurio.FFmpeg.Proxy64.dll";
 
         [DllImport(FFMPEGPROXYLIB, CallingConvention = InteropWrapper.CC)]
         public static extern IntPtr stream_open_file(Type mode, string filename);
